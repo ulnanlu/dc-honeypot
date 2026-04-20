@@ -1,6 +1,6 @@
 # Discord Honeypot Bot
 
-This bot watches one channel and, if anyone posts there, it deletes the message and bans the user.
+This bot watches one or more channels and, if anyone posts there, it bans the user and can delete their recent message history.
 
 ## Setup
 
@@ -43,7 +43,8 @@ GHCR_REPOSITORY=<owner>/<repo> IMAGE_TAG=latest docker compose up -d
 ## Environment variables
 
 - `BOT_TOKEN`: your bot token
-- `HONEYPOT_CHANNEL_ID`: channel ID to monitor
+- `HONEYPOT_CHANNEL_ID`: single channel ID to monitor (backward compatible)
+- `HONEYPOT_CHANNEL_IDS`: comma-separated channel IDs to monitor (recommended for multiple channels)
 - `BAN_REASON`: optional custom ban reason
 - `LOG_CHANNEL_ID`: optional channel ID for bot logs
 - `BAN_DELETE_MESSAGE_SECONDS`: optional number of seconds of recent message history to delete on ban (0 to 604800, default `86400`)

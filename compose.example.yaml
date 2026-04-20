@@ -1,6 +1,7 @@
 services:
   dc-honeypot:
     image: ghcr.io/ulnanlu/dc-honeypot:latest
+    container_name: dc-honeypot
     pull_policy: always
     env_file:
       - .env

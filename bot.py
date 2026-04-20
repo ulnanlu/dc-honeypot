@@ -16,8 +16,22 @@ def get_int(name: str, default: Optional[int] = None) -> Optional[int]:
     return int(value)
 
 
+def get_int_set(name: str) -> set[int]:
+    value = os.getenv(name, "")
+    if value.strip() == "":
+        return set()
+
+    result: set[int] = set()
+    for part in value.split(","):
+        token = part.strip()
+        if token:
+            result.add(int(token))
+    return result
+
+
 TOKEN = os.getenv("BOT_TOKEN")
 HONEYPOT_CHANNEL_ID = get_int("HONEYPOT_CHANNEL_ID")
+HONEYPOT_CHANNEL_IDS = get_int_set("HONEYPOT_CHANNEL_IDS")
 BAN_REASON = os.getenv(
     "BAN_REASON",
     "Auto-ban: user posted in restricted honeypot channel.",
@@ -29,7 +43,13 @@ if not TOKEN:
     raise RuntimeError("Missing BOT_TOKEN environment variable.")
 
 if not HONEYPOT_CHANNEL_ID:
-    raise RuntimeError("Missing HONEYPOT_CHANNEL_ID environment variable.")
+    if not HONEYPOT_CHANNEL_IDS:
+        raise RuntimeError(
+            "Missing honeypot channels. Set HONEYPOT_CHANNEL_IDS or HONEYPOT_CHANNEL_ID."
+        )
+
+if HONEYPOT_CHANNEL_ID:
+    HONEYPOT_CHANNEL_IDS.add(HONEYPOT_CHANNEL_ID)
 
 if BAN_DELETE_MESSAGE_SECONDS is None:
     BAN_DELETE_MESSAGE_SECONDS = 0
@@ -71,7 +91,7 @@ async def on_message(message: discord.Message) -> None:
     if not isinstance(message.channel, discord.TextChannel):
         return
 
-    if message.channel.id != HONEYPOT_CHANNEL_ID:
+    if message.channel.id not in HONEYPOT_CHANNEL_IDS:
         return
 
     member = message.author
@@ -87,7 +107,7 @@ async def on_message(message: discord.Message) -> None:
         )
         await send_log(
             guild,
-            f"Banned {member.mention} ({member.id}) for posting in <#{HONEYPOT_CHANNEL_ID}>.",
+            f"Banned {member.mention} ({member.id}) for posting in <#{message.channel.id}>.",
         )
     except discord.Forbidden:
         await send_log(
