@@ -1,0 +1,12 @@
+[project]
+name = "dc-honeypot"
+version = "0.1.0"
+description = "Discord honeypot bot that deletes and bans on a target channel"
+requires-python = ">=3.14"
+dependencies = [
+    "discord-py>=2.7.1",
+    "python-dotenv>=1.2.2",
+]
+
+[tool.uv]
+package = false

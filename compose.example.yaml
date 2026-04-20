@@ -1,0 +1,7 @@
+services:
+  dc-honeypot:
+    image: ghcr.io/ulnanlu/dc-honeypot:latest
+    pull_policy: always
+    env_file:
+      - .env
+    restart: unless-stopped
