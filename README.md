@@ -24,27 +24,25 @@ uv run python bot.py
 
 ## Docker
 
-Build and run locally:
-
 ```bash
-docker build -t dc-honeypot .
-docker run --env-file .env dc-honeypot
+docker pull ghcr.io/ulnanlu/dc-honeypot:latest
+docker run -d \
+  --name dc-honeypot \
+  --restart unless-stopped \
+  --env-file .env \
+  ghcr.io/ulnanlu/dc-honeypot:latest
 ```
-
-GitHub Actions runs Docker builds on pull requests, and pushes `linux/amd64` images to GHCR for `main` branch pushes and version tags (`v*`) via `.github/workflows/docker-build.yml`.
-
-Example production Compose setup (pull from GHCR):
 
 ```bash
 cp compose.example.yaml compose.yaml
-GHCR_REPOSITORY=<owner>/<repo> IMAGE_TAG=latest docker compose up -d
+docker compose pull
+docker compose up -d
 ```
 
 ## Environment variables
 
 - `BOT_TOKEN`: your bot token
-- `HONEYPOT_CHANNEL_ID`: single channel ID to monitor (backward compatible)
-- `HONEYPOT_CHANNEL_IDS`: comma-separated channel IDs to monitor (recommended for multiple channels)
+- `HONEYPOT_CHANNEL_IDS`: comma-separated channel IDs to monitor
 - `BAN_REASON`: optional custom ban reason
 - `LOG_CHANNEL_ID`: optional channel ID for bot logs
 - `BAN_DELETE_MESSAGE_SECONDS`: optional number of seconds of recent message history to delete on ban (0 to 604800, default `86400`)

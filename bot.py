@@ -30,7 +30,6 @@ def get_int_set(name: str) -> set[int]:
 
 
 TOKEN = os.getenv("BOT_TOKEN")
-HONEYPOT_CHANNEL_ID = get_int("HONEYPOT_CHANNEL_ID")
 HONEYPOT_CHANNEL_IDS = get_int_set("HONEYPOT_CHANNEL_IDS")
 BAN_REASON = os.getenv(
     "BAN_REASON",
@@ -42,14 +41,8 @@ BAN_DELETE_MESSAGE_SECONDS = get_int("BAN_DELETE_MESSAGE_SECONDS", 86400)
 if not TOKEN:
     raise RuntimeError("Missing BOT_TOKEN environment variable.")
 
-if not HONEYPOT_CHANNEL_ID:
-    if not HONEYPOT_CHANNEL_IDS:
-        raise RuntimeError(
-            "Missing honeypot channels. Set HONEYPOT_CHANNEL_IDS or HONEYPOT_CHANNEL_ID."
-        )
-
-if HONEYPOT_CHANNEL_ID:
-    HONEYPOT_CHANNEL_IDS.add(HONEYPOT_CHANNEL_ID)
+if not HONEYPOT_CHANNEL_IDS:
+    raise RuntimeError("Missing honeypot channels. Set HONEYPOT_CHANNEL_IDS.")
 
 if BAN_DELETE_MESSAGE_SECONDS is None:
     BAN_DELETE_MESSAGE_SECONDS = 0
