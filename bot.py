@@ -51,10 +51,7 @@ BAN_DELETE_MESSAGE_SECONDS = max(0, min(BAN_DELETE_MESSAGE_SECONDS, 604800))
 
 
 intents = discord.Intents.default()
-intents.guilds = True
-intents.members = True
 intents.messages = True
-intents.message_content = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
@@ -87,28 +84,29 @@ async def on_message(message: discord.Message) -> None:
     if message.channel.id not in HONEYPOT_CHANNEL_IDS:
         return
 
-    member = message.author
     guild = message.guild
-    if guild is None or not isinstance(member, discord.Member):
+    if guild is None:
         return
+
+    user = message.author
 
     try:
         await guild.ban(
-            member,
+            user,
             reason=BAN_REASON,
             delete_message_seconds=BAN_DELETE_MESSAGE_SECONDS,
         )
         await send_log(
             guild,
-            f"Banned {member.mention} ({member.id}) for posting in <#{message.channel.id}>.",
+            f"Banned {user.mention} ({user.id}) for posting in <#{message.channel.id}>.",
         )
     except discord.Forbidden:
         await send_log(
             guild,
-            f"Failed to ban {member.mention} ({member.id}) due to missing permissions.",
+            f"Failed to ban {user.mention} ({user.id}) due to missing permissions.",
         )
     except discord.HTTPException:
-        await send_log(guild, f"Discord API error while banning user {member.id}.")
+        await send_log(guild, f"Discord API error while banning user {user.id}.")
 
 
 bot.run(TOKEN)

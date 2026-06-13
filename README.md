@@ -5,9 +5,7 @@ This bot watches one or more channels and, if anyone posts there, it bans the us
 ## Setup
 
 1. Create your Discord bot in the Developer Portal.
-2. Enable **Privileged Gateway Intents**:
-   - `MESSAGE CONTENT INTENT`
-   - `SERVER MEMBERS INTENT`
+2. Leave **Privileged Gateway Intents** disabled. This bot does not read message content or member lists.
 3. Invite the bot with these permissions:
    - `View Channels`
    - `Read Message History`
