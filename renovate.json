@@ -1,0 +1,26 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "dependencyDashboard": true,
+  "packageRules": [
+    {
+      "description": "Group Python dependency updates",
+      "matchManagers": ["uv"],
+      "groupName": "Python dependencies"
+    },
+    {
+      "description": "Group Docker image updates",
+      "matchManagers": ["dockerfile"],
+      "groupName": "Docker dependencies"
+    },
+    {
+      "description": "Group GitHub Actions updates",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions"
+    }
+  ],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["* 0-3 1 * *"]
+  }
+}
