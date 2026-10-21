@@ -1,6 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
+  "automerge": false,
   "dependencyDashboard": true,
   "packageRules": [
     {
@@ -19,8 +20,11 @@
       "groupName": "GitHub Actions"
     }
   ],
-  "lockFileMaintenance": {
-    "enabled": true,
-    "schedule": ["* 0-3 1 * *"]
-  }
+  "schedule": ["every weekend"],
+  "labels": ["dependencies"],
+  "branchPrefix": "deps/",
+  "commitMessagePrefix": "chore(deps): ",
+  "prHourlyLimit": 2,
+  "prConcurrentLimit": 10,
+  "minimumReleaseAge": "3 days"
 }
